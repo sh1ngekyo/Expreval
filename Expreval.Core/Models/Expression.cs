@@ -24,7 +24,6 @@ namespace Expreval.Core.Models
                 Variables = configuration.Variables;
                 IsConfigrured = true;
             }
-            //configuration.
         }
     }
 }

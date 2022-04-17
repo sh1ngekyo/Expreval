@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace Expreval.Core.Exceptions
 {
-    class ValueAlreadyExistExceprion
+    public class ValueAlreadyExistException : Exception
     {
+        public ValueAlreadyExistException()
+        {
+        }
+
+        public ValueAlreadyExistException(string message)
+            : base(message)
+        {
+        }
+
+        public ValueAlreadyExistException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
     }
 }
