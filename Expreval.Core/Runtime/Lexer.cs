@@ -23,7 +23,7 @@ namespace Expreval.Core.Runtime
             this.expression = expression;
         }
 
-        public List<IToken> LexRequest()
+        public List<IToken> LexExpression()
         {
             if (!expression.Representation.IsCorrectBrackets((char)TokenType.OpenBracket, (char)TokenType.CloseBracket))
             {
