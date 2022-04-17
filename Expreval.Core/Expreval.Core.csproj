@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Runtime\Factory\" />
     <Folder Include="Runtime\Models\" />
   </ItemGroup>
