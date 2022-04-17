@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Runtime\Factory\" />
-    <Folder Include="Runtime\Models\" />
   </ItemGroup>
 
 </Project>
