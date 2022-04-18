@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace Expreval.Core.Runtime
 {
-    public sealed class Lexer
+    public sealed class Lexer<T>
     {
-        private readonly Expression expression;
+        private readonly Expression<T> expression;
 
-        public Lexer(Expression expression)
+        public Lexer(Expression<T> expression)
         {
             this.expression = expression;
         }

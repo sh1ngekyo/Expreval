@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Expreval.Core.Models
 {
-    public class Expression : IConfigurable
+    public class Expression<TVariable> : IConfigurable<TVariable>
     {
         public Expression(string representation)
         {
@@ -12,11 +12,14 @@ namespace Expreval.Core.Models
         }
 
         public IReadOnlyDictionary<char, IFunction> Functions { get; private set; }
-        public IReadOnlyDictionary<string, dynamic> Variables { get; private set; }
+
+        public IReadOnlyDictionary<string, TVariable> Variables { get; private set; }
+
         public string Representation { get; }
+
         public bool IsConfigrured { get; private set; }
 
-        public void Configure(IConfiguration configuration)
+        public void Configure(IConfiguration<TVariable> configuration)
         {
             if (!IsConfigrured)
             {

@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace Expreval.Core.Interfaces
 {
-    public interface IConfiguration
+    public interface IConfiguration<TVariable>
     {
         Dictionary<char, IFunction> Functions { get; }
 
-        Dictionary<string, dynamic> Variables { get; }
+        Dictionary<string, TVariable> Variables { get; }
 
-        void RegisterVariable<T>(string name, T variable);
+        void RegisterVariables(params (string Name, TVariable Variable)[] variables);
 
-        void RegisterFunction<T>(char prefix, T function) where T : IFunction;
+        void RegisterFunctions(params (char Prefix, IFunction Function)[] functions);
+
+        void RegisterVariable(string name, TVariable variable);
+
+        void RegisterFunction(char prefix, IFunction function);
     }
 }

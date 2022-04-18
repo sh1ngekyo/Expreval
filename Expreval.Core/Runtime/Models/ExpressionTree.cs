@@ -11,27 +11,30 @@ using System.Threading.Tasks;
 
 namespace Expreval.Core.Runtime.Models
 {
-    public class ExpressionTreeNode
+    public class ExpressionTreeNode<TData>
     {
         public NodeType Type { get; private set; }
-        public ExpressionTreeNode Left { get; private set; }
-        public ExpressionTreeNode Right { get; private set; }
-        public dynamic Data { get; }
+        public ExpressionTreeNode<TData> Left { get; private set; }
+        public ExpressionTreeNode<TData> Right { get; private set; }
+        public TData Data { get; }
+        public IFunction Function { get; }
 
-        internal ExpressionTreeNode(IFunction func, NodeType type, ExpressionTreeNode left, ExpressionTreeNode right)
+        internal ExpressionTreeNode(IFunction func, NodeType type, ExpressionTreeNode<TData> left, ExpressionTreeNode<TData> right)
         {
-            Data = func;
+            Function = func;
             Type = type;
             Left = left;
             Right = right;
+            Data = default;
         }
 
-        internal ExpressionTreeNode(dynamic value)
+        internal ExpressionTreeNode(TData value)
         {
             Data = value;
             Type = NodeType.Leaf;
             Left = null;
             Left = null;
+            Function = default;
         }
     }
 }

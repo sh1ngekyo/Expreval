@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace Expreval.Core
 {
-    public sealed class ExpressionConfiguration : IConfiguration
+    public sealed class ExpressionConfiguration<TVariable> : IConfiguration<TVariable>
     {
         public ExpressionConfiguration()
         {
-            Variables = new Dictionary<string, dynamic>();
+            Variables = new Dictionary<string, TVariable>();
             Functions = new Dictionary<char, IFunction>();
         }
 
-        public Dictionary<string, dynamic> Variables { get; }
-
         public Dictionary<char, IFunction> Functions { get; }
 
-        public void RegisterFunction<T>(char prefix, T function) where T : IFunction
+        public Dictionary<string, TVariable> Variables { get; }
+         
+        public void RegisterFunction(char prefix, IFunction function)
         {
             if (!Functions.TryAdd(prefix, function))
             {
@@ -29,11 +29,27 @@ namespace Expreval.Core
             }
         }
 
-        public void RegisterVariable<T>(string name, T variable)
+        public void RegisterFunctions(params (char Prefix, IFunction Function)[] functions)
+        {
+            foreach (var item in functions)
+            {
+                RegisterFunction(item.Prefix, item.Function);
+            }
+        }
+
+        public void RegisterVariable(string name, TVariable variable)
         {
             if (!Variables.TryAdd(name, variable))
             {
                 throw new ValueAlreadyExistException($"Variable '{name}' already exist in '{Variables}'");
+            }
+        }
+
+        public void RegisterVariables(params (string Name, TVariable Variable)[] variables)
+        {
+            foreach (var item in variables)
+            {
+                RegisterVariable(item.Name, item.Variable);
             }
         }
     }
