@@ -1,7 +1,7 @@
 # Expreval
 Fast, Compact, Easy-To-Use Library for evaluating boolean (or your own) expressions.
 
-[![Build](https://github.com/sh1ngekyo/Expreval/actions/workflows/build.yml/badge.svg)](https://github.com/sh1ngekyo/Expreval/actions/workflows/build.yml) [![Test](https://github.com/sh1ngekyo/Expreval/actions/workflows/test.yml/badge.svg)](https://github.com/sh1ngekyo/Expreval/actions/workflows/test.yml)
+[![Build](https://github.com/sh1ngekyo/Expreval/actions/workflows/build.yml/badge.svg?branch=master&event=workflow_run)](https://github.com/sh1ngekyo/Expreval/actions/workflows/build.yml) [![Test](https://github.com/sh1ngekyo/Expreval/actions/workflows/test.yml/badge.svg?branch=master&event=workflow_run)](https://github.com/sh1ngekyo/Expreval/actions/workflows/test.yml)
 
 # Quick example:
 
