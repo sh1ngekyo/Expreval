@@ -11,6 +11,6 @@ namespace Expreval.Core.Interfaces
 
     public interface IFunction
     {
-        FunctionType Type { get; set; }
+        FunctionType Type { get; }
     }
 }

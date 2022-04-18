@@ -25,9 +25,9 @@ namespace Expreval.Core.Test
             config.RegisterVariable(nameof(A), A);
             config.RegisterVariable(nameof(B), B);
             config.RegisterVariable(nameof(C), C);
-            config.RegisterFunction('&', new Dummy.Function.BooleanAnd { Type = FunctionType.Binary });
-            config.RegisterFunction('|', new Dummy.Function.BooleanOr { Type = FunctionType.Binary });
-            config.RegisterFunction('!', new Dummy.Function.BooleanNot { Type = FunctionType.Unary });
+            config.RegisterFunction('&', new Dummy.Function.BooleanAnd());
+            config.RegisterFunction('|', new Dummy.Function.BooleanOr());
+            config.RegisterFunction('!', new Dummy.Function.BooleanNot());
 
             var expr = new Expression<bool>("!(A) & (B | C) & C");
             expr.Configure(config);
@@ -48,9 +48,9 @@ namespace Expreval.Core.Test
             config.RegisterVariable(nameof(A), A);
             config.RegisterVariable(nameof(B), B);
             config.RegisterVariable(nameof(C), C);
-            config.RegisterFunction('&', new Dummy.Function.BooleanAnd { Type = FunctionType.Binary });
-            config.RegisterFunction('|', new Dummy.Function.BooleanOr { Type = FunctionType.Binary });
-            config.RegisterFunction('!', new Dummy.Function.BooleanNot { Type = FunctionType.Unary });
+            config.RegisterFunction('&', new Dummy.Function.BooleanAnd());
+            config.RegisterFunction('|', new Dummy.Function.BooleanOr());
+            config.RegisterFunction('!', new Dummy.Function.BooleanNot());
 
             var expr = new Expression<bool>("(A) & (B | C) & !C");
             expr.Configure(config);
@@ -84,7 +84,7 @@ namespace Expreval.Core.Test
             var config = new ExpressionConfiguration<IEnumerable<int>>();
             config.RegisterVariable(nameof(A), A);
             config.RegisterVariable(nameof(B), B);
-            config.RegisterFunction('+', new Dummy.Function.IEnumerableConcat<int, int, int> { Type = FunctionType.Binary });
+            config.RegisterFunction('+', new Dummy.Function.IEnumerableConcat<int, int, int>());
 
             var expr = new Expression<IEnumerable<int>>("A+B");
             expr.Configure(config);
@@ -108,7 +108,7 @@ namespace Expreval.Core.Test
             var config = new ExpressionConfiguration<dynamic>();
             config.RegisterVariable(nameof(A), A);
             config.RegisterVariable(nameof(B), B);
-            config.RegisterFunction('+', new Dummy.Function.IEnumerableConcat<string, int, double> { Type = FunctionType.Binary });
+            config.RegisterFunction('+', new Dummy.Function.IEnumerableConcat<string, int, double>());
 
             var expr = new Expression<dynamic>("A+B");
             expr.Configure(config);
