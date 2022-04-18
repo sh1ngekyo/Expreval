@@ -32,7 +32,7 @@ namespace Expreval.Core.Runtime
 
             var tokens = new List<IToken>();
             Regex.Split(input: expression.Representation.Replace(" ", ""),
-                        pattern: @$"([{TokenType.OpenBracket}{TokenType.CloseBracket}{expression.Functions.Keys.ToString<char>()}])")
+                        pattern: @$"([{(char)TokenType.OpenBracket}{(char)TokenType.CloseBracket}{expression.Functions.Keys.ToString<char>()}])")
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .ToList()
             .ForEach(x =>
