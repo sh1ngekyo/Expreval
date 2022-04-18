@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Expreval.Core.Interfaces
 {
-    public interface IConfigurable
+    public interface IConfigurable<TVariable>
     {
         IReadOnlyDictionary<char, IFunction> Functions { get; }
 
-        IReadOnlyDictionary<string, dynamic> Variables { get; }
+        IReadOnlyDictionary<string, TVariable> Variables { get; }
 
         bool IsConfigrured { get; }
 
         string Representation { get; }
 
-        void Configure(IConfiguration configuration);
+        void Configure(IConfiguration<TVariable> configuration);
     }
 }

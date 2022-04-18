@@ -12,7 +12,7 @@ namespace Expreval.Core.Test
         [Fact]
         public void RegisterVariable_DefaultCase_AddVariable()
         {
-            var config = new ExpressionConfiguration();
+            var config = new ExpressionConfiguration<int>();
             var expected = new { Name = "test", Value = 10 };
 
             config.RegisterVariable(expected.Name, expected.Value);
@@ -24,7 +24,7 @@ namespace Expreval.Core.Test
         [Fact]
         public void RegisterVariable_DoubleRegisterCase_ThrowValueAlreadyExistException()
         {
-            var config = new ExpressionConfiguration();
+            var config = new ExpressionConfiguration<int>();
             var input = new { Name = "test", Value = 10 };
 
             config.RegisterVariable(input.Name, input.Value);
@@ -35,7 +35,7 @@ namespace Expreval.Core.Test
         [Fact]
         public void RegisterFunction_DefaultCase_AddFunction()
         {
-            var config = new ExpressionConfiguration();
+            var config = new ExpressionConfiguration<int>();
             var mock = new Moq.Mock<IFunction>();
             mock.SetupGet(func => func.Type).Returns(FunctionType.Binary);
             var input = new { Prefix = '*', Function = mock.Object };
@@ -48,7 +48,7 @@ namespace Expreval.Core.Test
         [Fact]
         public void RegisterFunction_DoubleRegisterCase_ThrowValueAlreadyExistException()
         {
-            var config = new ExpressionConfiguration();
+            var config = new ExpressionConfiguration<int>();
             var mock = new Moq.Mock<IFunction>();
             mock.SetupGet(func => func.Type).Returns(FunctionType.Binary);
             var input = new { Prefix = '*', Function = mock.Object };

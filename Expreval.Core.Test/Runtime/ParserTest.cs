@@ -35,12 +35,12 @@ namespace Expreval.Core.Test.Runtime
                 CreateDummyToken(TokenType.CloseBracket, null),
             };
 
-            var root = new Parser(polishTokens).ParseTokens();
+            var root = new Parser(polishTokens).ParseTokens<object>();
 
             Assert.NotNull(root);
             Assert.Equal(NodeType.Unary, root.Type);
 
-            Assert.NotNull(root.Left);
+            Assert.NotNull(root.Left); 
             Assert.Null(root.Right);
             Assert.Equal(NodeType.Binary, root.Left.Type);
 

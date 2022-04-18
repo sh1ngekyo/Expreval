@@ -16,9 +16,9 @@ namespace Expreval.Core.Test.Runtime
 {
     public class LexerTest
     {
-        private ExpressionConfiguration SetupTestExpressionConfig((string Name, dynamic Value)[] vars, (char Prefix, IFunction Function)[] funcs)
+        private ExpressionConfiguration<dynamic> SetupTestExpressionConfig((string Name, dynamic Value)[] vars, (char Prefix, IFunction Function)[] funcs)
         {
-            var config = new ExpressionConfiguration();
+            var config = new ExpressionConfiguration<dynamic>();
             foreach (var item in vars)
                 config.RegisterVariable(item.Name, item.Value);
             foreach (var item in funcs)
@@ -27,7 +27,7 @@ namespace Expreval.Core.Test.Runtime
         }
 
         [Fact]
-        public void LexExpression_DefaultCase_ReturnsListOfTokens()
+        public void LexExpression_DefaultDynamicCase_ReturnsListOfTokens()
         {
             var expectedData = new TokenType[] {TokenType.Variable, TokenType.BinaryFunction, TokenType.Variable };
 
@@ -36,10 +36,10 @@ namespace Expreval.Core.Test.Runtime
             mock.SetupGet(x => x.Type).Returns(Enums.FunctionType.Binary);
             var funcs = new (char Prefix, IFunction Function)[] { ('+', mock.Object) };
             var config = SetupTestExpressionConfig(vars, funcs);
-            var expr = new Expression("A+B");
+            var expr = new Expression<dynamic>("A+B");
             expr.Configure(config);
 
-            var result = new Lexer(expr).LexExpression();
+            var result = new Lexer<dynamic>(expr).LexExpression();
 
             Assert.Equal(expectedData.Length, result.Count);
 
@@ -57,10 +57,10 @@ namespace Expreval.Core.Test.Runtime
             mock.SetupGet(x => x.Type).Returns(Enums.FunctionType.Binary);
             var funcs = new (char Prefix, IFunction Function)[] { ('+', mock.Object) };
             var config = SetupTestExpressionConfig(vars, funcs);
-            var expr = new Expression("A*B");
+            var expr = new Expression<dynamic>("A*B");
             expr.Configure(config);
 
-            Assert.Throws<UnknownTokenException>(()=> { new Lexer(expr).LexExpression(); });
+            Assert.Throws<UnknownTokenException>(()=> { new Lexer<dynamic>(expr).LexExpression(); });
         }
 
         [Fact]
@@ -71,10 +71,10 @@ namespace Expreval.Core.Test.Runtime
             mock.SetupGet(x => x.Type).Returns(Enums.FunctionType.Binary);
             var funcs = new (char Prefix, IFunction Function)[] { ('+', mock.Object) };
             var config = SetupTestExpressionConfig(vars, funcs);
-            var expr = new Expression("(A+B))");
+            var expr = new Expression<dynamic>("(A+B))");
             expr.Configure(config);
 
-            Assert.Throws<NotBalancedBracketsException>(() => { new Lexer(expr).LexExpression(); });
+            Assert.Throws<NotBalancedBracketsException>(() => { new Lexer<dynamic>(expr).LexExpression(); });
         }
     }
 }

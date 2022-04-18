@@ -16,31 +16,31 @@ namespace Expreval.Core
 {
     public static class Interpreter
     {
-        public static T Eval<T>(this Expression inputExpression)
+        public static T Eval<T>(this Expression<T> inputExpression)
         {
-            return (T)(inputExpression.CreateNewExpressionTree().Eval());
+            return inputExpression.CreateNewExpressionTree().Eval<T>();
         }
 
-        public static ExpressionTreeNode CreateNewExpressionTree(this Expression inputExpression)
+        public static ExpressionTreeNode<T> CreateNewExpressionTree<T>(this Expression<T> inputExpression)
         {
             if (inputExpression is null)
                 throw new ArgumentNullException(nameof(inputExpression));
             if (!inputExpression.IsConfigrured)
                 throw new NotConfiguredExpressionException(inputExpression.Representation);
 
-            return new Parser(new Lexer(inputExpression).LexExpression()).ParseTokens();
+            return new Parser(new Lexer<T>(inputExpression).LexExpression()).ParseTokens<T>();
         }
 
-        private static dynamic Eval(this ExpressionTreeNode expr)
+        private static T Eval<T>(this ExpressionTreeNode<T> expr)
         {
             if (expr.Type == NodeType.Binary)
-                return GetCallMethod(expr.Data, "IBinaryFunction`3").Invoke(expr.Data, new object[] { Eval(expr.Right), Eval(expr.Left) });
+                return (T)GetCallMethod(expr.Function, "IBinaryFunction`3").Invoke(expr.Function, new object[] { Eval<T>(expr.Right), Eval<T>(expr.Left) });
             if (expr.Type == NodeType.Unary)
-                return GetCallMethod(expr.Data, "IUnaryFunction`2").Invoke(expr.Data, new object[] { Eval(expr.Left) });
+                return (T)GetCallMethod(expr.Function, "IUnaryFunction`2").Invoke(expr.Function, new object[] { Eval<T>(expr.Left) });
             return expr.Data;
         }
 
-        private static MethodInfo GetCallMethod(dynamic handler, string functionInterface)
+        private static MethodInfo GetCallMethod(object handler, string functionInterface)
         {
             var _interface = handler.GetType().GetInterface(functionInterface);
             return _interface.GetMethod("Call", RemoveReturnType(_interface.GetGenericArguments()));

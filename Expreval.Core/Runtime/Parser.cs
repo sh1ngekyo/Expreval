@@ -22,31 +22,31 @@ namespace Expreval.Core.Runtime
             this.infixTokens = infixTokens;
         }
 
-        public ExpressionTreeNode ParseTokens()
+        public ExpressionTreeNode<T> ParseTokens<T>()
         {
             var tokensEnumerator = infixTokens.TransformToPolish().GetEnumerator();
             tokensEnumerator.MoveNext();
-            var root = BuildExpressionTree(ref tokensEnumerator);
+            var root = BuildExpressionTree<T>(ref tokensEnumerator);
             return root;
         }
 
-        private ExpressionTreeNode BuildExpressionTree(ref List<IToken>.Enumerator tokensEnumerator)
+        private ExpressionTreeNode<T> BuildExpressionTree<T>(ref List<IToken>.Enumerator tokensEnumerator)
         {
             var value = tokensEnumerator.Current.Value;
             if (tokensEnumerator.Current.Type == TokenType.UnaryFunction)
             {
                 tokensEnumerator.MoveNext();
-                var operand = BuildExpressionTree(ref tokensEnumerator);
-                return ExpressionTreeNodeFactory.CreateNodeUnary(value, operand);
+                var operand = BuildExpressionTree<T>(ref tokensEnumerator);
+                return ExpressionTreeNodeFactory.CreateNodeUnary<T>(value, operand);
             }
             else if (tokensEnumerator.Current.Type == TokenType.BinaryFunction)
             {
                 tokensEnumerator.MoveNext();
-                var left = BuildExpressionTree(ref tokensEnumerator);
-                var right = BuildExpressionTree(ref tokensEnumerator);
-                return ExpressionTreeNodeFactory.CreateNodeBinary(value, left, right);
+                var left = BuildExpressionTree<T>(ref tokensEnumerator);
+                var right = BuildExpressionTree<T>(ref tokensEnumerator);
+                return ExpressionTreeNodeFactory.CreateNodeBinary<T>(value, left, right);
             }
-            var lit = ExpressionTreeNodeFactory.CreateNodeVar(value);
+            var lit = ExpressionTreeNodeFactory.CreateNodeVar<T>(value);
             tokensEnumerator.MoveNext();
             return lit;
         }
