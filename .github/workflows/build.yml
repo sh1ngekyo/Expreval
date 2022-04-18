@@ -4,7 +4,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Expreval
+    name: Build project
     steps:
       - uses: actions/checkout@v2
       - name: Setup dotnet
