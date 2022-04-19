@@ -1,20 +1,24 @@
 # Expreval
 Fast, Compact, Easy-To-Use Library for evaluating boolean (or your own) expressions.
 
-[![CI](https://github.com/sh1ngekyo/Expreval/workflows/build/badge.svg
-)](https://github.com/sh1ngekyo/Expreval/actions/workflows/build.yml)
-[![CI](https://github.com/sh1ngekyo/Expreval/workflows/test/badge.svg
-)](https://github.com/sh1ngekyo/Expreval/actions/workflows/test.yml)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sh1ngekyo/expreval/build?style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sh1ngekyo/expreval/test?label=tests&style=for-the-badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/sh1ngekyo/expreval?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/sh1ngekyo/expreval?style=for-the-badge)
 
 # Quick example:
 
 A = true, B = false; 
+
 ```csharp
-new Expression("!(A | B)").Eval<bool>();
-new Expression("((!B) & A) | B)").Eval<bool>();
-new Expression("!B").Eval<double>();
+"!(A | B)".ToConfiguredExpression<bool>().Eval();
+"((!B) & A) | B)".ToConfiguredExpression<bool>().Eval();
+Convert.ToDouble(("!B".ToConfiguredExpression<bool>().Eval()));
 ```
 Output: false, true, 1.0;
+
+# Another example:
+[Truth Table Builder](https://github.com/sh1ngekyo/Expreval/tree/example-branch/Expreval.CLI.TruthTable)
 
 # Imports:
 ```csharp
@@ -30,146 +34,51 @@ using Expreval.Core.Models;
 // here we define function with two boolean params and boolean return type
 class AndOperator : IBinaryFunction<bool, bool, bool>
 {
-    public FunctionType Type { get; set; }
-
     /* your function */
     public bool Call(bool left, bool right)
-    {
-        return left & right;
-    }
+        => left & right;
 }
 ```
 
 # Create and configure your expression:
 
 ```csharp
-var config = new ExpressionConfiguration() as IConfiguration;
-config.RegisterVariable("A", true);
-config.RegisterVariable("B", false);
-config.RegisterFunction('&', new AndOperator() { Type = FunctionType.Binary });
-var expr = new Expression("B & A");
+var config = new ExpressionConfiguration<bool>();
+config.RegisterVariables(("A", true), ("B", false));
+config.RegisterFunctions('&', new AndOperator());
+var expr = "B & A".ToExpression<bool>();
 expr.Configure(config);
 ```
 
 # Evaluate your expression:
 ```csharp
-//Eval<T> where T is your expected returned type
-expr.Eval<bool>()
+var result = expr.Eval();
 ```
+Output for example: false
 
 # Use your custom types as variables and functions:
 
 ```csharp
-class ListPlusOperator<T> : IBinaryFunction<List<T>, List<T>, List<T>>
+public class IEnumerableConcat<TResult, TLeft, TRight> 
+    : IBinaryFunction<IEnumerable<TResult>, IEnumerable<TLeft>, IEnumerable<TRight>>
 {
-    public FunctionType Type { get; set; }
-
-    public List<T> Call(List<T> left, List<T> right)
-    {
-        var result = new List<T>();
-        result.AddRange(left);
-        result.AddRange(right);
-        return result;
-    }
+    public IEnumerable<TResult> Call(IEnumerable<TLeft> left, IEnumerable<TRight> right) 
+        => (IEnumerable<TResult>)left.Concat((IEnumerable<TLeft>)right);
 }
-
 ...
 
-var Left = new List<int>() { 1, 2, 3 };
-var Right = new List<int>() { 4, 5, 6 };
+List<int> A = new() { 1, 2, 3 }, B = new() { 4, 5, 6 };
 
-var config = new ExpressionConfiguration() as IConfiguration;
-config.RegisterVariable(nameof(Left), Left);
-config.RegisterVariable(nameof(Right), Right);
-config.RegisterFunction('+', new ListPlusOperator<int>() { Type = FunctionType.Binary });
-
-var expr = new Expression($"{nameof(Left)} + {nameof(Right)}");
-expr.Configure(config);
-
-expr.Eval<List<int>>();
+var config = new ExpressionConfiguration<IEnumerable<int>>();
+config.RegisterVariables((nameof(A), A), (nameof(B), B));
+config.RegisterFunction('+', new IEnumerableConcat<int, int, int>());
+var result = "A+B".ToConfiguredExpression<IEnumerable<int>>(config).Eval().ToList();
 ```
 Output: 1 2 3 4 5 6
 
-# Quick example:
+# FAQ
 
-A = true, B = false; 
-```csharp
-new Expression("!(A | B)").Eval<bool>();
-new Expression("((!B) & A) | B)").Eval<bool>();
-new Expression("!B").Eval<double>();
-```
-Output: false, true, 1.0;
-
-# Imports:
-```csharp
-using Expreval.Core;
-using Expreval.Core.Enums;
-using Expreval.Core.Interfaces;
-using Expreval.Core.Models;
-```
-
-# Define your functions with IBinaryFunction<TResult, TLeft, TRight> and IUnaryFunction<TResult, TVariable>
-
-```csharp
-// here we define function with two boolean params and boolean return type
-class AndOperator : IBinaryFunction<bool, bool, bool>
-{
-    public FunctionType Type { get; set; }
-
-    /* your function */
-    public bool Call(bool left, bool right)
-    {
-        return left & right;
-    }
-}
-```
-
-# Create and configure your expression:
-
-```csharp
-var config = new ExpressionConfiguration() as IConfiguration;
-config.RegisterVariable("A", true);
-config.RegisterVariable("B", false);
-config.RegisterFunction('&', new AndOperator() { Type = FunctionType.Binary });
-var expr = new Expression("B & A");
-expr.Configure(config);
-```
-
-# Evaluate your expression:
-```csharp
-//Eval<T> where T is your expected returned type
-expr.Eval<bool>()
-```
-
-# Use your custom types as variables and functions:
-
-```csharp
-class ListPlusOperator<T> : IBinaryFunction<List<T>, List<T>, List<T>>
-{
-    public FunctionType Type { get; set; }
-
-    public List<T> Call(List<T> left, List<T> right)
-    {
-        var result = new List<T>();
-        result.AddRange(left);
-        result.AddRange(right);
-        return result;
-    }
-}
-
-...
-
-var Left = new List<int>() { 1, 2, 3 };
-var Right = new List<int>() { 4, 5, 6 };
-
-var config = new ExpressionConfiguration() as IConfiguration;
-config.RegisterVariable(nameof(Left), Left);
-config.RegisterVariable(nameof(Right), Right);
-config.RegisterFunction('+', new ListPlusOperator<int>() { Type = FunctionType.Binary });
-
-var expr = new Expression($"{nameof(Left)} + {nameof(Right)}");
-expr.Configure(config);
-
-expr.Eval<List<int>>();
-```
-Output: 1 2 3 4 5 6
+1. > Can I use different types in an expression?
+    * Yes, but you may have problems if there is no implicit type conversion. An option would be to explicitly specify a type conversion. Another option is to use a dynamic type.
+2. > How does an expression get executed?
+    * The lexical analyzer converts a string into a set of tokens. The tokens are then converted into a Polish notation. Then the parser builds an expression tree and gives the tree to be executed. Execution is done by recursive traversal of the tree.

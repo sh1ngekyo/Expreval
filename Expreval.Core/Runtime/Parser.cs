@@ -1,6 +1,7 @@
 ﻿using Expreval.Core.Enums;
 using Expreval.Core.Interfaces;
 using Expreval.Core.Models;
+using Expreval.Core.Runtime.Exceptions;
 using Expreval.Core.Runtime.Extensions;
 using Expreval.Core.Runtime.Factory;
 using Expreval.Core.Runtime.Models;
@@ -32,6 +33,10 @@ namespace Expreval.Core.Runtime
 
         private ExpressionTreeNode<T> BuildExpressionTree<T>(ref List<IToken>.Enumerator tokensEnumerator)
         {
+            if(tokensEnumerator.Current is null)
+            {
+                throw new UnexpectedEndOfTokenSequenceException();
+            }
             var value = tokensEnumerator.Current.Value;
             if (tokensEnumerator.Current.Type == TokenType.UnaryFunction)
             {

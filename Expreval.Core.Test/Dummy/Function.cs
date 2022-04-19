@@ -15,41 +15,22 @@ namespace Expreval.Core.Test.Dummy
 
         public class BooleanAnd : IBinaryFunction<bool, bool, bool>
         {
-            public FunctionType Type { get; set; }
-
-            public bool Call(bool left, bool right)
-            {
-                return left & right;
-            }
+            public bool Call(bool left, bool right) => left & right;
         }
         public class BooleanOr : IBinaryFunction<bool, bool, bool>
         {
-            public FunctionType Type { get; set; }
-
-            public bool Call(bool left, bool right)
-            {
-                return left | right;
-            }
+            public bool Call(bool left, bool right) => left | right;
         }
         public class BooleanNot : IUnaryFunction<bool, bool>
         {
-            public FunctionType Type { get; set; }
-
-            public bool Call(bool var)
-            {
-                return !var;
-            }
+            public bool Call(bool var) => !var;
         }
 
         public class IEnumerableConcat<TResult, TLeft, TRight> 
             : IBinaryFunction<IEnumerable<TResult>, IEnumerable<TLeft>, IEnumerable<TRight>>
         {
-            public FunctionType Type { get; set; }
-
-            public IEnumerable<TResult> Call(IEnumerable<TLeft> left, IEnumerable<TRight> right)
-            {
-                return (IEnumerable<TResult>)left.Concat((IEnumerable<TLeft>)right);
-            }
+            public IEnumerable<TResult> Call(IEnumerable<TLeft> left, IEnumerable<TRight> right) 
+                => (IEnumerable<TResult>)left.Concat((IEnumerable<TLeft>)right);
         }
     }
 }

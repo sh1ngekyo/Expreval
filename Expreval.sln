@@ -1,10 +1,13 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expreval.Core", "Expreval.Core\Expreval.Core.csproj", "{84846CA0-1520-4284-8D67-BF86245D3E79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expreval.Core.Test", "Expreval.Core.Test\Expreval.Core.Test.csproj", "{C065C859-201B-4C56-9F78-1D080D11EA47}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expreval.CLI.TruthTable", "Expreval.CLI.TruthTable\Expreval.CLI.TruthTable.csproj", "{4906E4DD-9827-4CFD-9904-AFB0D07361B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +23,10 @@ Global
 		{C065C859-201B-4C56-9F78-1D080D11EA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C065C859-201B-4C56-9F78-1D080D11EA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C065C859-201B-4C56-9F78-1D080D11EA47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4906E4DD-9827-4CFD-9904-AFB0D07361B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4906E4DD-9827-4CFD-9904-AFB0D07361B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4906E4DD-9827-4CFD-9904-AFB0D07361B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4906E4DD-9827-4CFD-9904-AFB0D07361B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

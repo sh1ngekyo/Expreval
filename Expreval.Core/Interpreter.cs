@@ -16,10 +16,26 @@ namespace Expreval.Core
 {
     public static class Interpreter
     {
-        public static T Eval<T>(this Expression<T> inputExpression)
+        public static Expression<T> ToExpression<T>(this string expressionRepresentation) 
+            => string.IsNullOrWhiteSpace(expressionRepresentation)
+                ? throw new ArgumentException($"'{nameof(expressionRepresentation)}' cannot be null or whitespace.", nameof(expressionRepresentation))
+                : new Expression<T>(expressionRepresentation);
+
+        public static Expression<T> ToConfiguredExpression<T>(this string expressionRepresentation, IConfiguration<T> configuration)
         {
-            return inputExpression.CreateNewExpressionTree().Eval<T>();
+            if (string.IsNullOrWhiteSpace(expressionRepresentation))
+                throw new ArgumentException($"'{nameof(expressionRepresentation)}' cannot be null or empty.", nameof(expressionRepresentation));
+
+            if (configuration is null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            var expr = new Expression<T>(expressionRepresentation);
+            expr.Configure(configuration);
+            return expr;
         }
+
+        public static T Eval<T>(this Expression<T> inputExpression) 
+            => inputExpression.CreateNewExpressionTree().Eval<T>();
 
         public static ExpressionTreeNode<T> CreateNewExpressionTree<T>(this Expression<T> inputExpression)
         {
@@ -31,7 +47,7 @@ namespace Expreval.Core
             return new Parser(new Lexer<T>(inputExpression).LexExpression()).ParseTokens<T>();
         }
 
-        private static T Eval<T>(this ExpressionTreeNode<T> expr)
+        public static T Eval<T>(this ExpressionTreeNode<T> expr)
         {
             if (expr.Type == NodeType.Binary)
                 return (T)GetCallMethod(expr.Function, "IBinaryFunction`3").Invoke(expr.Function, new object[] { Eval<T>(expr.Right), Eval<T>(expr.Left) });
