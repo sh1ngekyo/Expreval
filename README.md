@@ -18,7 +18,7 @@ Convert.ToDouble(("!B".ToConfiguredExpression<bool>().Eval()));
 Output: false, true, 1.0;
 
 # Another example:
-[Truth Table Builder](https://github.com/sh1ngekyo/Expreval/tree/example-branch/Expreval.CLI.TruthTable)
+[Truth Table Builder](https://github.com/sh1ngekyo/Expreval/tree/master/Expreval.CLI.TruthTable)
 
 # Imports:
 ```csharp
